@@ -15,7 +15,7 @@ const Layout = () => {
   const title= pageTitles[location.pathname]||"SocialAI";
   const  [isMobileMenuOpen,setIsMobileMenuOpen]=useState(false);
   return (
-    <div className= "flex h-screen bg-slate-500">
+    <div className= "flex h-screen bg-slate-50">
       {isMobileMenuOpen && <div className="fixed inset-0 bg-slate-900/50 z-40 md:hidden" onClick={()=>setIsMobileMenuOpen(false)} />}
       <Sidebar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
