@@ -239,6 +239,7 @@ const AIComposer = () => {
              </div>
                   <button onClick={handleSchedule} className="w-full flex items-center justify-center gap-2 py-3 rounded-md bg-slate-200 text-slate-700 hover:bg-red-500 hover:text-white transition">
                     {scheduling?<Loader2Icon className="size-4 animate-spin" />:<TimerIcon className="size-4" />}
+                    Set Schedule
 
                   </button>
             </div>
