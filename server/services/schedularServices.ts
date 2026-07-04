@@ -26,7 +26,7 @@ export const initSchedular =()=>{
                         continue;
                     }
                     const zernioPlatforms = accounts.map((acc)=>({
-                        tform:acc.platform as any,
+                        platform:acc.platform as any,
                         accountId: acc.zernioAccountId!
                     }))
 
@@ -34,7 +34,7 @@ export const initSchedular =()=>{
                         content:post.content,
                         publishNow:true,
                         ...(post.mediaUrl?{mediaItems:[{type:post.mediaType || "image",url:post.mediaUrl}]}:{}),
-                        platform:zernioPlatforms,
+                        platforms:zernioPlatforms,
                     }
                     console.log(`Publishing post ${post._id} to Zernio with media :${post.mediaUrl||"none"}`)
                     const response = await zernio.posts.createPost({
