@@ -1,6 +1,6 @@
 import { ActivityIcon, CheckCircleIcon, ClockIcon,  SendIcon, Share2Icon, TrendingUpIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { dummyAccountsData, dummyActivityData, dummyPostsData } from "../assets/assets"
+import api from "../api/axios"
 
 
 const Dashboard = () => {
@@ -10,7 +10,8 @@ const Dashboard = () => {
   useEffect(()=>{
     const fetchDashboardData= async()=>{
       try{
-        const [postRes,accountRes,activityRes]= [{data:dummyPostsData},{data:dummyAccountsData},{data:dummyActivityData}]
+        const [postRes,accountRes,activityRes]= await Promise.all([api.get("/api/posts"),api.get("/api/accounts"),api.get("/api/activity")]) 
+
         const posts = postRes.data;
         setStats({
           scheduled:posts.filter((p:any)=>p.status=='scheduled').length,

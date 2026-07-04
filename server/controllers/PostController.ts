@@ -45,18 +45,18 @@ try{
     }
     const ai = new GoogleGenAI({apiKey });
     const textResponse = await ai.models.generateContent({
-        model:"gemini-2 .5-flash",
+        model:"gemini-2.5-flash",
         contents:`Generate a social media post based on this prompt:"${prompt}".
         Tone: ${tone}.
-        Include relevant hasgtags.
-        Format the response as JSON with "content" ans "imagePrompt" fields.
+        Include relevant hashtags.
+        Format the response as JSON with "content" and "imagePrompt" fields.
         The "imagePrompt" should be a highly descriptive prompt for an image generator that complements the post.`,
     });
     let content="";
     let imagePrompt="";
     try{
         const rawText= textResponse.text||"";
-        const jsonMatch = rawText.match(/\{[\s\s]*}/);
+        const jsonMatch = rawText.match(/\{[\s\S]*}/);
         const data = jsonMatch? JSON.parse(jsonMatch[0]):{content:rawText,imagePrompt:prompt};
         content= data.content;
         imagePrompt= data.imagePrompt;
@@ -107,6 +107,7 @@ try{
             mediaType:mediaUrl?"image":undefined,
             tone
         })
+        res.status(201).json(generation);
 
 
 } catch(error:any){
