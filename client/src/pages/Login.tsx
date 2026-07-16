@@ -4,6 +4,9 @@ import { MailIcon, LockIcon, ArrowRightIcon, User2Icon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import HudCard from "../components/motion/HudCard";
+
+const clip = { clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))" };
 
 export default function Login() {
     const [loginState, setLoginState] = useState(true);
@@ -35,42 +38,49 @@ export default function Login() {
     },[user])
 
     return (
-        <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-ink text-white flex items-center justify-center p-4 relative overflow-hidden">
+            {/* grid + scanlines + red horizon line (no radial) */}
+            <div className="absolute inset-0 grid-bg [mask-image:linear-gradient(180deg,rgba(0,0,0,0.6),transparent_75%)] pointer-events-none" />
+            <div className="absolute inset-0 scanlines opacity-30 pointer-events-none" />
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,53,70,0.5),transparent)] pointer-events-none" />
+
             <div className="relative w-full max-w-md">
-                <div className="bg-white rounded-2xl shadow-sm p-8">
+                <HudCard hover={false} notch={22} innerClassName="p-8">
                     <div className="flex flex-col items-center mb-8">
-                        <Link to="/" className="flex items-center gap-2">
-                            <img src="/logo.svg" alt="Logo" className="size-6.5" />
-                            <h1 className="text-2xl">Scheduler</h1>
+                        <Link to="/" className="flex items-center gap-2.5">
+                            <span className="grid place-items-center size-8 bg-red text-white shadow-[0_0_18px_rgba(255,53,70,0.6)]" style={clip}>
+                                <img src="/logo.svg" alt="Logo" className="size-5 brightness-0 invert" />
+                            </span>
+                            <h1 className="text-2xl font-serif tracking-tight">SCHEDULER</h1>
                         </Link>
-                        <p className="text-slate-500 text-sm mt-1">Sign in to your Dashboard</p>
+                        <p className="hud-label text-white/40 mt-3">{loginState ? "Sign in to your console" : "Create your free account"}</p>
                     </div>
-                    <form onSubmit={handleSubmit} className="space-y-5 text-sm">
+                    <form onSubmit={handleSubmit} className="space-y-4 text-sm">
                         {!loginState && (
                             <div>
-                                <label className="block mb-1.5">Name</label>
+                                <label className="block mb-1.5 text-white/60">Name</label>
                                 <div className="relative">
-                                    <User2Icon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                                    <input type="text" required placeholder="Enter your name" className="w-full pl-10 pr-4 py-2.5 bg-slate-50 outline-slate-300 border border-slate-200 rounded-full" value={name} onChange={(e) => setName(e.target.value)} />
+                                    <User2Icon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/35 z-10" />
+                                    <input type="text" required placeholder="Enter your name" className="field w-full pl-10 pr-4 py-2.5" style={clip} value={name} onChange={(e) => setName(e.target.value)} />
                                 </div>
                             </div>
                         )}
                         <div>
-                            <label className="block mb-1.5">Email</label>
+                            <label className="block mb-1.5 text-white/60">Email</label>
                             <div className="relative">
-                                <MailIcon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                                <input type="email" required placeholder="you@company.com" className="w-full pl-10 pr-4 py-2.5 bg-slate-50 outline-slate-300 border border-slate-200 rounded-full" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <MailIcon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/35 z-10" />
+                                <input type="email" required placeholder="you@company.com" className="field w-full pl-10 pr-4 py-2.5" style={clip} value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                         </div>
                         <div>
-                            <label className="block mb-1.5">Password</label>
+                            <label className="block mb-1.5 text-white/60">Password</label>
                             <div className="relative">
-                                <LockIcon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                                <input type="password" required placeholder="********" className="w-full pl-10 pr-4 py-2.5 bg-slate-50 outline-slate-300 border border-slate-200 rounded-full" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <LockIcon className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/35 z-10" />
+                                <input type="password" required placeholder="********" className="field w-full pl-10 pr-4 py-2.5" style={clip} value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                         </div>
 
-                        <button type="submit" disabled={loading} className="w-full py-2.5 px-4 bg-linear-to-r from-red-600 to-red-500 text-white rounded-full text-sm transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                        <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-red text-white text-sm font-medium transition-all disabled:opacity-60 hover:shadow-[0_0_28px_rgba(255,53,70,0.55)] flex items-center justify-center gap-2" style={clip}>
                             {loading ? (
                                 "Signing in..."
                             ) : (
@@ -81,24 +91,24 @@ export default function Login() {
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center text-sm text-slate-500">
+                    <div className="mt-6 text-center text-sm text-white/45">
                         {loginState ? (
                             <>
                                 Don't have an account?{" "}
-                                <button onClick={() => setLoginState(false)} className="text-red-600 hover:text-red-700">
+                                <button onClick={() => setLoginState(false)} className="text-red hover:text-red/80 transition-colors">
                                     Create one free
                                 </button>
                             </>
                         ) : (
                             <>
                                 Already have an account?{" "}
-                                <button onClick={() => setLoginState(true)} className="text-red-600 hover:text-red-700">
+                                <button onClick={() => setLoginState(true)} className="text-red hover:text-red/80 transition-colors">
                                     Sign In
                                 </button>
                             </>
                         )}
                     </div>
-                </div>
+                </HudCard>
             </div>
         </div>
     );

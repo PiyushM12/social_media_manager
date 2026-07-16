@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "../components/Home/Navbar";
 import Hero from "../components/Home/Hero";
 import Features from "../components/Home/Features";
@@ -6,10 +7,23 @@ import Testimonials from "../components/Home/Testimonials";
 import Pricing from "../components/Home/Pricing";
 import CTA from "../components/Home/CTA";
 import Footer from "../components/Home/Footer";
+import GridBackdrop from "../components/motion/GridBackdrop";
+import { useSmoothScroll } from "../hooks/useSmoothScroll";
 
 export default function Landing() {
+    useSmoothScroll();
+
+    useEffect(() => {
+        const prev = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = "#070709";
+        return () => {
+            document.body.style.backgroundColor = prev;
+        };
+    }, []);
+
     return (
-        <div className="min-h-screen bg-white text-slate-900 font-sans">
+        <div className="landing-dark min-h-screen font-sans antialiased overflow-x-hidden">
+            <GridBackdrop />
             <Navbar />
             <Hero />
             <Features />

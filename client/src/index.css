@@ -1,45 +1,340 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..600&display=swap");
 @import "tailwindcss";
 
 @theme {
-    --color-bg: #fafafa;
-    --color-text: #111111;
-    --font-sans: "Outfit", sans-serif;
-    --font-serif: "Urbanist", sans-serif;
+    --color-bg: #070709;
+    --color-ink: #070709;
+    --color-ink-2: #0c0b12;
+    --color-panel: #0e0d15;
+    --color-line: rgba(255, 255, 255, 0.08);
+    --color-text: #f3f2f6;
+    --color-muted: #8b8a96;
+
+    --color-red: #ff3546;
+    --color-red-2: #ff6a3d;
+
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-serif: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
     box-sizing: border-box;
 }
 
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
 html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-    background-color: var(--color-bg);
+    background-color: var(--color-ink);
     color: var(--color-text);
     font-family: var(--font-sans);
+    letter-spacing: -0.011em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
 }
 
 button {
     cursor: pointer;
+    font-family: inherit;
 }
 
-/* Custom scrollbar */
+/* Display headings — geometric, techy */
+.font-serif {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+}
+
+/* HUD mono label */
+.hud-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 11px;
+}
+
+/* ============ SURFACES ============ */
+.landing-dark,
+.app-dark {
+    background-color: var(--color-ink);
+    color: var(--color-text);
+    position: relative;
+    isolation: isolate;
+}
+
+/* Simple flat panel (lists, forms) */
+.panel {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.glass-strong {
+    background: linear-gradient(180deg, rgba(20, 18, 26, 0.92), rgba(11, 10, 16, 0.92));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============ HUD CARD — notched, angular, red edge ============ */
+.hud {
+    --notch: 16px;
+    position: relative;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 53, 70, 0.55), rgba(255, 255, 255, 0.08) 42%, rgba(255, 53, 70, 0.14));
+    clip-path: polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, var(--notch) 100%, 0 calc(100% - var(--notch)));
+    transition:
+        background 0.4s var(--ease-out-expo),
+        filter 0.4s var(--ease-out-expo),
+        transform 0.4s var(--ease-out-expo);
+}
+.hud-inner {
+    height: 100%;
+    background: linear-gradient(180deg, #131019, #0a090f);
+    clip-path: polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, var(--notch) 100%, 0 calc(100% - var(--notch)));
+}
+.hud-hover:hover {
+    background: linear-gradient(135deg, rgba(255, 53, 70, 0.95), rgba(255, 255, 255, 0.14) 42%, rgba(255, 53, 70, 0.32));
+    filter: drop-shadow(0 0 18px rgba(255, 53, 70, 0.32));
+    transform: translateY(-4px);
+}
+/* permanently-lit HUD (e.g. featured pricing plan) */
+.hud-pro {
+    background: linear-gradient(135deg, rgba(255, 53, 70, 0.95), rgba(255, 255, 255, 0.16) 42%, rgba(255, 53, 70, 0.42));
+    filter: drop-shadow(0 0 26px rgba(255, 53, 70, 0.35));
+}
+
+/* corner tick accent for HUD headers */
+.hud-tick {
+    position: relative;
+}
+.hud-tick::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 14px;
+    background: var(--color-red);
+    box-shadow: 0 0 10px rgba(255, 53, 70, 0.8);
+}
+
+/* ============ BACKGROUND DECOR (no radial) ============ */
+.grid-bg {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+.scanlines {
+    background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0, rgba(255, 255, 255, 0.022) 1px, transparent 1px, transparent 4px);
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+        opacity 0.85s var(--ease-out-expo),
+        transform 0.85s var(--ease-out-expo);
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+.parallax {
+    will-change: transform;
+}
+
+/* ---- Marquee ---- */
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+.animate-marquee {
+    animation: marquee 40s linear infinite;
+}
+.marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* subtle pulse for status dots / accents */
+@keyframes pulse-red {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+.animate-pulse-red {
+    animation: pulse-red 2.4s ease-in-out infinite;
+}
+
+/* Red gradient text */
+.text-red-grad {
+    background: linear-gradient(100deg, #ff6b6b 0%, #ff1f3d 46%, #ff6a3d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Form fields on dark */
+.field {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f2f1f6;
+    color-scheme: dark;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+.field::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+.field:focus {
+    outline: none;
+    border-color: rgba(255, 53, 70, 0.6);
+    box-shadow: 0 0 0 3px rgba(255, 53, 70, 0.14);
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 9px;
+    height: 9px;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #ddd;
+    background: rgba(255, 53, 70, 0.35);
     border-radius: 99px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #bbb;
+    background: rgba(255, 53, 70, 0.6);
+    background-clip: padding-box;
+}
+
+::selection {
+    background: rgba(255, 53, 70, 0.32);
+    color: #fff;
+}
+
+/* ============ HERO SECTION TELEMETRY ============ */
+
+@keyframes float-slow {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(0.5deg);
+    }
+}
+
+@keyframes float-slower {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(10px) rotate(-0.5deg);
+    }
+}
+
+.animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-slower {
+    animation: float-slower 8s ease-in-out infinite;
+}
+
+@keyframes telemetry-ping {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.9;
+        filter: drop-shadow(0 0 2px var(--color-red));
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0.3;
+        filter: drop-shadow(0 0 6px var(--color-red));
+    }
+}
+
+.animate-telemetry-ping {
+    animation: telemetry-ping 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Cyber style primary button */
+.btn-cyber-primary {
+    position: relative;
+    background: linear-gradient(135deg, var(--color-red), #d61c2c);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-cyber-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+.btn-cyber-primary:hover::before {
+    left: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .parallax {
+        transform: none !important;
+    }
+    .animate-marquee,
+    .animate-pulse-red,
+    .animate-float-slow,
+    .animate-float-slower,
+    .animate-telemetry-ping {
+        animation: none !important;
+    }
+    html {
+        scroll-behavior: auto;
+    }
 }
