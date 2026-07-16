@@ -1,42 +1,42 @@
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "lucide-react";
+import Reveal from "../motion/Reveal";
+import HudCard from "../motion/HudCard";
 
 export default function CTA() {
     return (
-        <section className="py-20" style={{ background: "#ffffff" }}>
+        <section className="py-20 sm:py-24">
             <div className="max-w-6xl mx-auto px-5 sm:px-8">
-                <div
-                    className="relative rounded-3xl overflow-hidden p-14 sm:p-20 text-center"
-                    style={{
-                        background: "linear-gradient(145deg, #fff5f5 0%, #fef2f2 100%)",
-                        border: "1.5px solid rgba(239,68,68,0.12)",
-                    }}
-                >
-                    {/* Glow blobs */}
-                    <div className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(239,68,68,0.1) 0%, transparent 70%)" }} />
-                    <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)" }} />
+                <Reveal>
+                    <HudCard hover={false} notch={30} innerClassName="relative overflow-hidden p-12 sm:p-20 text-center">
+                        {/* grid + scanlines, no radial */}
+                        <div className="absolute inset-0 grid-bg [mask-image:linear-gradient(180deg,rgba(0,0,0,0.7),transparent)] pointer-events-none" />
+                        <div className="absolute inset-0 scanlines opacity-30 pointer-events-none" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-[linear-gradient(90deg,transparent,rgba(255,53,70,0.7),transparent)]" />
 
-                    <div className="relative">
-                        <div className="mb-6 inline-flex items-center gap-1.5 bg-red-500/10 border border-red-500/15 text-red-500 text-[11px] font-medium tracking-[0.06em] uppercase px-3.5 py-1.5 rounded-full">Ready to grow?</div>
-                        <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl leading-tight font-medium text-gray-900">
-                            Automate your social
-                            <br />
-                            <span className="text-red-400 italic">media today</span>
-                        </h2>
-                        <p className="mt-6 text-gray-500 max-w-lg mx-auto  text-lg">Join thousands of creators and marketers who trust Scheduler to grow their audience on autopilot.</p>
+                        <div className="relative">
+                            <div className="mb-6 inline-flex items-center gap-2 glass hud-label text-red px-3.5 py-1.5">Ready to deploy?</div>
+                            <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl leading-[1.02] text-white uppercase">
+                                Automate your social
+                                <br />
+                                <span className="text-red-grad">media today</span>
+                            </h2>
+                            <p className="mt-6 text-white/55 max-w-lg mx-auto text-lg leading-relaxed">Join thousands of creators and marketers who trust Scheduler to grow their audience on autopilot.</p>
 
-                        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-                            <Link to="/login" className="bg-red-500 text-white rounded-full font-semibold hover:bg-red-600 hover:shadow-[0_8px_24px_rgba(239,68,68,0.35)] inline-flex items-center gap-2 text-[15px] px-10 py-4 w-full sm:w-auto justify-center">
-                                Get Started Free <ArrowRightIcon className="size-4" />
-                            </Link>
-                            <a href="#pricing" className="bg-transparent text-[#333] border-[1.5px] border-black/10 rounded-full font-medium hover:bg-black/5 hover:border-black/20 inline-flex items-center gap-2 text-[15px] px-10 py-4 w-full sm:w-auto justify-center">
-                                View Pricing
-                            </a>
+                            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                <Link to="/login" className="group bg-red text-white font-medium hover:shadow-[0_0_40px_rgba(255,53,70,0.6)] inline-flex items-center gap-2 text-[15px] px-10 py-4 w-full sm:w-auto justify-center transition-all" style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))" }}>
+                                    Get Started Free
+                                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />
+                                </Link>
+                                <a href="#pricing" className="glass text-white font-medium hover:bg-white/10 inline-flex items-center gap-2 text-[15px] px-10 py-4 w-full sm:w-auto justify-center transition-all" style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))" }}>
+                                    View Pricing
+                                </a>
+                            </div>
+
+                            <p className="mt-6 hud-label text-white/35">No card required · Cancel anytime</p>
                         </div>
-
-                        <p className="mt-6 text-xs text-gray-400">No credit card required · Cancel anytime</p>
-                    </div>
-                </div>
+                    </HudCard>
+                </Reveal>
             </div>
         </section>
     );

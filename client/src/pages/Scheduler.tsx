@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dummyPostsData, PLATFORMS } from "../assets/assets";
+import { PLATFORMS } from "../assets/assets";
 import {
   ArrowRightIcon,
   CalendarDaysIcon,
@@ -74,30 +74,52 @@ const Scheduler = () => {
       setMediaFile(null);
       fetchPosts();
 
-      
+
     }catch(error:any){
       toast.error(error?.response?.data?.message||error.message);
     } finally{
       setLoading(false);
     }
-    
+
   };
+
+  const PostRow = ({ post, kind }: { post: any; kind: "scheduled" | "published" }) => (
+    <div className="px-5 py-4 hover:bg-white/[0.03] transition-colors">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex gap-1.5 items-center">
+          {post.platforms.map((pl: string) => {
+            const meta = PLATFORMS.find((p) => p.id === pl);
+            return meta ? <meta.icon key={pl} className="size-3.5 text-white/45" /> : null;
+          })}
+        </div>
+        <div className="flex items-center gap-2">
+          {post.mediaType && (
+            <span className="text-xs bg-white/8 text-white/60 border border-white/10 px-1.5 py-0.5 rounded-md font-semibold capitalize">
+              {post.mediaType}
+            </span>
+          )}
+          <span className="text-xs text-white/35">
+            {new Date(kind === "scheduled" ? post.scheduleFor : post.updatedAt).toLocaleString()}
+          </span>
+          {kind === "published" && <span className="text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 px-2 py-0.5 rounded-full">Published</span>}
+        </div>
+      </div>
+      <p className="text-sm text-white/55 line-clamp-2 max-w-md">{post.content}</p>
+    </div>
+  );
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 h-full">
       {/* compose panel */}
-      <div className="w-full lg:w-[460px] shrik-0">
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+      <div className="w-full lg:w-[460px] shrink-0">
+        <div className="panel rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <h2 className="text-lg text-slate-700 ">Compose Post</h2>
+            <h2 className="text-lg text-white font-medium">Compose Post</h2>
           </div>
           <form action="" className="space-y-5" onSubmit={handleSchedule}>
             {/* platforms */}
             <div>
-              <label
-                htmlFor=""
-                className="block text-xs text-slate-500 uppercase mb-2"
-              >
+              <label className="block text-xs text-white/45 uppercase tracking-wider mb-2">
                 Platforms
               </label>
               <div className="flex flex-wrap gap-3">
@@ -107,7 +129,7 @@ const Scheduler = () => {
                     <button
                       type="button"
                       key={p.id}
-                      className={`flex items-center gap-1.5 p-3 rounded-md border transition-all duration-150 ${active ? "bg-red-50 border-red-300 text-red-500 scale-103" : "border-slate-200 text-slate-500 hover:border-slate-300"}`}
+                      className={`flex items-center gap-1.5 p-3 rounded-xl border transition-all duration-150 ${active ? "bg-red/15 border-red/40 text-red scale-105" : "border-white/10 text-white/50 hover:border-white/20 hover:text-white/70"}`}
                       onClick={() => togglePlatform(p.id)}
                     >
                       <p.icon className="size-4.5" />
@@ -119,30 +141,30 @@ const Scheduler = () => {
 
             {/* content */}
             <div>
-              <label className="block text-xs text-sl-500 uppercase mb-2">
+              <label className="block text-xs text-white/45 uppercase tracking-wider mb-2">
                 Content
               </label>
               <textarea
                 required
                 rows={5}
                 placeholder="What do you want to share today?"
-                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm placeholder-slate-400 outline-none resize-none"
+                className="field w-full px-5 py-4 rounded-2xl text-sm resize-none"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
               <div
-                className={`text-right text-xs mt-1 font-medium ${content.length > 2270 ? "text-red-500" : "text-slate-400"}`}
+                className={`text-right text-xs mt-1 font-medium ${content.length > 280 ? "text-red" : "text-white/35"}`}
               >
                 {content.length}/280
               </div>
             </div>
             {/* media upload */}
             <div>
-              <label className="block text-xs text-slate-500 uppercase mb-2 ">
+              <label className="block text-xs text-white/45 uppercase tracking-wider mb-2">
                 Media (optional){" "}
               </label>
               {mediaFile ? (
-                <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                <div className="relative rounded-xl overflow-hidden border border-white/10 bg-white/5">
                   {mediaFile.type.startsWith("image/") ? (
                     <img
                       src={URL.createObjectURL(mediaFile)}
@@ -159,16 +181,14 @@ const Scheduler = () => {
                   <button
                     type="button"
                     onClick={() => setMediaFile(null)}
-                    className="absolute top-2 right-2 size-7 bg-sl-900/60
-                      hover:bg-sl-900/80
-                      text-white rounded-full flex items-center justify-center transition-colors"
+                    className="absolute top-2 right-2 size-7 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-colors"
                   >
                     <XIcon className="size-3.5" />
                   </button>
                 </div>
               ) : (
-                <label className="flex items-center justify-center gap-2 p-5 py-10 border-2 border-dashed border-slatw-200 rounded-xl cursor-pointer hover:border-red-300 hover:bg-red-50/50 transition-all group  ">
-                  <span className="text-sm text-slate-500 group-hover:text-red-600 transition-colors ">
+                <label className="flex items-center justify-center gap-2 p-5 py-10 border-2 border-dashed border-white/12 rounded-xl cursor-pointer hover:border-red/50 hover:bg-red/5 transition-all group">
+                  <span className="text-sm text-white/50 group-hover:text-red transition-colors">
                     Click to upload image or video
                   </span>
                   <input
@@ -185,18 +205,15 @@ const Scheduler = () => {
             {/* date and time */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-slate-500 uppercase mb-2 ">
+                <label className="block text-xs text-white/45 uppercase tracking-wider mb-2">
                   Date
                 </label>
                 <div className="relative">
-                  <CalendarIcon
-                    className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none
-                     "
-                  />
+                  <CalendarIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10" />
                   <input
                     required
                     type="date"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 text-sm outline-none "
+                    className="field w-full pl-10 pr-4 py-2.5 rounded-lg text-sm"
                     value={scheduleDate}
                     onChange={(e) => setScheduleDate(e.target.value)}
                   />
@@ -204,18 +221,15 @@ const Scheduler = () => {
               </div>
 
               <div>
-                <label className="block text-xs text-slate-500 uppercase mb-2 ">
+                <label className="block text-xs text-white/45 uppercase tracking-wider mb-2">
                   Time
                 </label>
                 <div className="relative">
-                  <ClockIcon
-                    className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none
-                     "
-                  />
+                  <ClockIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10" />
                   <input
                     required
                     type="time"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 text-sm outline-none "
+                    className="field w-full pl-10 pr-4 py-2.5 rounded-lg text-sm"
                     value={scheduleTime}
                     onChange={(e) => setScheduleTime(e.target.value)}
                   />
@@ -226,13 +240,12 @@ const Scheduler = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-red-500 hover:bg-red-600 transition-all text-white rounded-lg"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-red hover:shadow-[0_8px_28px_rgba(244,63,94,0.4)] disabled:opacity-60 transition-all text-white rounded-xl font-medium"
             >
               {loading ? (
                 <>
-                  <div className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin">
-                    Scheduling...
-                  </div>
+                  <div className="size-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Scheduling...
                 </>
               ) : (
                 <>
@@ -247,107 +260,40 @@ const Scheduler = () => {
       {/* queue panel */}
       <div className="flex-1 flex flex-col gap-6 min-w-0">
         {/* upcoming */}
-        <div className="bg-white rounded-2xl border border-s-lime-200 overflow-hidden">
-          <div
-            className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100
-          "
-          >
-            <CalendarDaysIcon className="size-4 text-zinc-500" />
-            <h3 className="text-slate-900 text-sm">Upcoming</h3>
-            <span className="ml-auto text-xs font-bold bg-zinc-200 px-2 py-0.5 rounded-full">
+        <div className="panel rounded-2xl overflow-hidden">
+          <div className="flex items-center gap-2.5 px-5 py-4 border-b border-white/8">
+            <CalendarDaysIcon className="size-4 text-red" />
+            <h3 className="text-white text-sm font-medium">Upcoming</h3>
+            <span className="ml-auto text-xs font-bold bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
               {scheduled.length}
             </span>
           </div>
-          <div className="max-h-72 overflow-y-auto divide-y divide-slate-50 ">
+          <div className="max-h-72 overflow-y-auto divide-y divide-white/6">
             {scheduled.length == 0 ? (
-              <div className="py-10 text-center text-slate-400 text-sm">
+              <div className="py-10 text-center text-white/35 text-sm">
                 No posts scheduled yet
               </div>
             ) : (
-              scheduled.map((post) => (
-                <div
-                  key={post._id}
-                  className="px-5 py-4 hover:bg-slate-50/60 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex gap-1.5 items-center">
-                      {post.platforms.map((pl: string) => {
-                        const meta = PLATFORMS.find((p) => p.id === pl);
-                        return meta ? (
-                          <meta.icon
-                            key={pl}
-                            className="size-3.5 text-slate-400"
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {post.mediaType && (
-                        <span className="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded-md font-semibold capitalize">
-                          {post.mediaType}
-                        </span>
-                      )}
-                      <span className="text-xs text-slate-400">
-                        {new Date(post.scheduleFor).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-500 line-clamp-2 max-w-md">{post.content}</p>
-                </div>
-              ))
+              scheduled.map((post) => <PostRow key={post._id} post={post} kind="scheduled" />)
             )}
           </div>
         </div>
         {/* published */}
-         <div className="bg-white rounded-2xl border border-s-lime-200 overflow-hidden">
-          <div
-            className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100
-          "
-          >
-            <SendIcon className="size-4 text-zinc-500" />
-            <h3 className="text-slate-900 text-sm">Published</h3>
-            <span className="ml-auto text-xs font-bold bg-zinc-200 px-2 py-0.5 rounded-full">
+         <div className="panel rounded-2xl overflow-hidden">
+          <div className="flex items-center gap-2.5 px-5 py-4 border-b border-white/8">
+            <SendIcon className="size-4 text-emerald-300" />
+            <h3 className="text-white text-sm font-medium">Published</h3>
+            <span className="ml-auto text-xs font-bold bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
               {published.length}
             </span>
           </div>
-          <div className="max-h-72 overflow-y-auto divide-y divide-slate-50 ">
+          <div className="max-h-72 overflow-y-auto divide-y divide-white/6">
             {published.length == 0 ? (
-              <div className="py-10 text-center text-slate-400 text-sm">
+              <div className="py-10 text-center text-white/35 text-sm">
                 No published posts yet
               </div>
             ) : (
-              published.map((post) => (
-                <div
-                  key={post._id}
-                  className="px-5 py-4 hover:bg-slate-50/60 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex gap-1.5 items-center">
-                      {post.platforms.map((pl: string) => {
-                        const meta = PLATFORMS.find((p) => p.id === pl);
-                        return meta ? (
-                          <meta.icon
-                            key={pl}
-                            className="size-3.5 text-slate-400"
-                          />
-                        ) : null;
-                      })}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {post.mediaType && (
-                        <span className="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded-md font-semibold capitalize">
-                          {post.mediaType}
-                        </span>
-                      )}
-                      <span className="text-xs text-slate-400">
-                        {new Date(post.updatedAt).toLocaleString()}
-                      </span>
-                      <span className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded-full">Published</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-500 line-clamp-2 max-w-4/5">{post.content}</p>
-                </div>
-              ))
+              published.map((post) => <PostRow key={post._id} post={post} kind="published" />)
             )}
           </div>
         </div>
