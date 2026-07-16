@@ -338,3 +338,27 @@ button {
         scroll-behavior: auto;
     }
 }
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.25);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.25);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.heart-beat {
+  display: inline-block;
+  transform-origin: center;
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
